@@ -1,0 +1,269 @@
+services:
+
+  radarr:
+    container_name: radarr
+    image: ghcr.io/hotio/radarr:latest
+    restart: unless-stopped
+    ports:
+      - ${RADARR_PORT}:7878
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${APP_DATA}/radarr:/config
+      - ${MEDIA_DATA_FOLDER}:/data
+  
+  sonarr:
+    container_name: sonarr
+    hostname: sonarr.internal
+    image: ghcr.io/hotio/sonarr:latest
+    restart: unless-stopped
+    ports:
+      - ${SONARR_PORT_TV}:8989
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${APP_DATA}/sonarr:/config
+      - ${MEDIA_DATA_FOLDER}:/data
+    
+  sonarr-anime:
+    container_name: sonarr-anime
+    image: ghcr.io/hotio/sonarr:latest
+    restart: unless-stopped
+    ports:
+      - ${SONARR_PORT_ANIME}:8989
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${APP_DATA}/sonarr-anime:/config
+      - ${MEDIA_DATA_FOLDER}:/data
+
+  lidarr:
+    container_name: lidarr
+    image: ghcr.io/hotio/lidarr:latest
+    restart: unless-stopped
+    ports:
+      - ${LIDARR_PORT}:8686
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${APP_DATA}/lidarr:/config
+      - ${MEDIA_DATA_FOLDER}:/data
+
+  bazarr:
+    container_name: bazarr
+    image: ghcr.io/hotio/bazarr:latest
+    restart: unless-stopped
+    ports:
+      - ${BAZARR_PORT}:6767
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${APP_DATA}/bazarr:/config
+      - ${MEDIA_DATA_FOLDER}:/data
+
+  prowlarr:
+    container_name: prowlarr
+    image: ghcr.io/hotio/prowlarr:latest
+    restart: unless-stopped
+    ports:
+      - ${PROWLARR_PORT}:9696
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${APP_DATA}/prowlarr:/config
+
+  flaresolverr:
+    container_name: flaresolverr
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    restart: unless-stopped 
+    ports:
+      - ${FLARESOLVERR_PORT}:8191
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - LOG_HTML=${LOG_HTML:-false}
+      - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
+      - TZ=${TIMEZONE}
+
+  qbittorrent:
+    container_name: qbittorrent
+    hostname: qbittorrent.internal
+    image: ghcr.io/hotio/qbittorrent:latest
+    restart: unless-stopped
+    ports:
+      - ${QBITTORRENT_TCP_UDP}:6881 # qbittorrent
+      - ${QBITTORRENT_TCP_UDP}:6881/udp # qbittorrent
+      - ${QBITTORRENT_WEBUI_PORT}:8080 # qbittorrent
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
+      - ${QBITTORRENT_WEBUI_PORT}=8080
+      - VPN_ENABLED=true 
+      - VPN_CONF=wg0
+      - VPN_PROVIDER=proton
+      - VPN_LAN_NETWORK=192.168.10.0/24 
+      - VPN_LAN_LEAK_ENABLED=false
+      - VPN_AUTO_PORT_FORWARD=true
+      - VPN_KEEP_LOCAL_DNS=false
+      - VPN_FIREWALL_TYPE=auto
+      - VPN_HEALTHCHECK_ENABLED=true
+      - PRIVOXY_ENABLED=false
+      - UNBOUND_ENABLED=false
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv6.conf.all.disable_ipv6=1
+    volumes:
+      - ./wireguard/wg0.conf:/config/wireguard/wg0.conf
+      - /etc/localtime:/etc/localtime:ro
+      - ${APP_DATA}/qbittorrent:/config
+      - ${MEDIA_DATA_FOLDER}/torrents:/data/torrents
+
+  sabnzbd:
+    image: ghcr.io/hotio/sabnzbd:latest
+    container_name: sabnzbd
+    hostname: sabnzbd.internal
+    restart: unless-stopped
+    ports:
+      - ${SABNZDB_PORT}:8080
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
+      - VPN_ENABLED=true 
+      - VPN_CONF=wg0
+      - VPN_PROVIDER=proton
+      - VPN_LAN_NETWORK=192.168.10.0/24 
+      - VPN_LAN_LEAK_ENABLED=false
+      - VPN_AUTO_PORT_FORWARD=true
+      - VPN_KEEP_LOCAL_DNS=false
+      - VPN_FIREWALL_TYPE=auto
+      - VPN_HEALTHCHECK_ENABLED=true
+      - PRIVOXY_ENABLED=false
+      - UNBOUND_ENABLED=false
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv6.conf.all.disable_ipv6=1
+    volumes:
+      - ./wireguard/wg0.conf:/config/wireguard/wg0.conf
+      - ${APP_DATA}/sabnzbd:/config
+      - ${MEDIA_DATA_FOLDER}/usenet:/data/usenet
+
+  emby:
+    image: emby/embyserver:latest
+    container_name: embyserver
+    restart: on-failure
+    ports:
+      - ${EMBY_HTTP_PORT}:8096 # HTTP port
+    environment:
+      - UID=${PUID}
+      - GID=${PGID} 
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${APP_DATA}/emby:/config
+      - ${MEDIA_PATH}/tv:/mnt/tv
+      - ${MEDIA_PATH}/movies:/mnt/movies
+      - ${MEDIA_PATH}/anime:/mnt/anime
+      - ${MEDIA_PATH}/music:/mnt/music
+    devices:
+      - /dev/dri:/dev/dri # VAAPI/NVDEC/NVENC render nodes
+
+  requestrr:
+    container_name: requestrr
+    image: ghcr.io/hotio/requestrr
+    restart: unless-stopped
+    ports:
+      - 4545:4545
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID} 
+      - TZ=${TIMEZONE}
+    volumes:
+      - /${APP_DATA}/requestrr:/config
+
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    restart: unless-stopped
+    ports:
+      - ${HOMEPAGE_PORT}:3000
+    environment:
+      # GENERAL
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
+
+      # ARR STACK
+      - HOMEPAGE_VAR_SONARR_ANIME_URL=${HOST_URL}:${SONARR_PORT_ANIME}
+      - HOMEPAGE_VAR_SONARR_ANIME_API=${SONARR_ANIME_KEY}
+      - HOMEPAGE_VAR_SONARR_TV_URL=${HOST_URL}:${SONARR_PORT_TV}
+      - HOMEPAGE_VAR_SONARR_TV_API=${SONARR_TV_KEY}
+      - HOMEPAGE_VAR_RADARR_URL=${HOST_URL}:${RADARR_PORT}
+      - HOMEPAGE_VAR_RADARR_API=${RADARR_KEY}
+      - HOMEPAGE_VAR_LIDARR_URL=${HOST_URL}:${LIDARR_PORT}
+      - HOMEPAGE_VAR_LIDARR_API=${LIDARR_KEY}
+      - HOMEPAGE_VAR_BAZARR_URL=${HOST_URL}:${BAZARR_PORT}
+      - HOMEPAGE_VAR_BAZARR_API=${BAZARR_KEY}
+      - HOMEPAGE_VAR_PROWLARR_URL=${HOST_URL}:${PROWLARR_PORT}
+      - HOMEPAGE_VAR_PROWLARR_API=${PROWLARR_KEY}
+
+      # EMBY
+      - HOMEPAGE_VAR_EMBY_URL=${HOST_URL}:${EMBY_PORT}
+      - HOMEPAGE_VAR_EMBY_API=${EMBY_KEY}
+
+      # TORRENT
+      - HOMEPAGE_VAR_QBITTORRENT_USERNAME=${QBITTORRENT_USERNAME}
+      - HOMEPAGE_VAR_QBITTORRENT_PASSWORD=${QBITTORRENT_PASSWORD}
+      - HOMEPAGE_VAR_QBITTORRENT_URL=${HOST_URL}:${QBITTORRENT_WEBUI_PORT}
+
+      # USENET
+      - HOMEPAGE_VAR_SABNZDB_URL=${HOST_URL}:${SABNZDB_PORT}
+      - HOMEPAGE_VAR_SABNZDB_API=${SABNZDB_API}
+
+      # NGINX PROXY MANAGER
+      - HOMEPAGE_VAR_NGINX_PROXY_MANAGER_URL=${HOST_URL}:${NGINX_PROXY_MANAGER_PORT}
+      - HOMEPAGE_VAR_NGINX_PROXY_MANAGER_USERNAME=${NGINX_PROXY_MANAGER_USERNAME}
+      - HOMEPAGE_VAR_NGINX_PROXY_MANAGER_PASSWORD=${NGINX_PROXY_MANAGER_PASSWORD}
+
+      # ADGUARD HOME
+      - HOMEPAGE_VAR_ADGUARDHOME1_URL=${ADGUARDHOME1_URL}
+      - HOMEPAGE_VAR_ADGUARDHOME2_URL=${ADGUARDHOME2_URL}
+      - HOMEPAGE_VAR_ADGUARDHOME_USERNAME=${ADGUARDHOME_USERNAME}
+      - HOMEPAGE_VAR_ADGUARDHOME_PASSWORD=${ADGUARDHOME_PASSWORD}
+    volumes:
+      - ${APP_DATA}/homepage:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${MEDIA_MOUNT_1}:/mnt/media1:ro              # Optional
+      - ${MEDIA_MOUNT_2}:/mnt/media2:ro              # Optional
+
+  nginx-proxy-manager:
+    container_name: nginx-proxy-manager
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ${APP_DATA}/nginx-proxy-manager/data:/data
+      - ${APP_DATA}/nginx-proxy-manager/letsencrypt:/etc/letsencrypt

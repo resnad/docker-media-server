@@ -1,0 +1,114 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/latest/configs/services
+
+- Torrent:
+    - Qbittorrent:
+        href: {{HOMEPAGE_VAR_QBITTORRENT_URL}}
+        description: Torrent downloader 
+        icon: qbittorrent.png
+        widget:
+            type: qbittorrent
+            url: {{HOMEPAGE_VAR_QBITTORRENT_URL}}
+            username: {{HOMEPAGE_VAR_QBITTORRENT_USERNAME}}
+            password: {{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}
+    - SABnzdb:
+        href: {{HOMEPAGE_VAR_SABNZDB_URL}}
+        description: Usenet downloader
+        icon: sabnzbd.png
+        widget:
+            type: sabnzbd
+            url: {{HOMEPAGE_VAR_SABNZDB_URL}}
+            key: {{HOMEPAGE_VAR_SABNZDB_API}}
+    - Sonarr Anime:
+        href: {{HOMEPAGE_VAR_SONARR_ANIME_URL}}
+        description: Anime downloader
+        icon: sonarr.png
+        widget:
+            type: sonarr
+            url: {{HOMEPAGE_VAR_SONARR_ANIME_URL}}
+            key: {{HOMEPAGE_VAR_SONARR_ANIME_API}}
+    - Sonarr TV:
+        href: {{HOMEPAGE_VAR_SONARR_TV_URL}}
+        description: TV show downloader
+        icon: sonarr.png
+        widget:
+            type: sonarr
+            url: {{HOMEPAGE_VAR_SONARR_TV_URL}}
+            key: {{HOMEPAGE_VAR_SONARR_TV_API}}
+    - Radarr:
+        href: {{HOMEPAGE_VAR_RADARR_URL}}
+        description: Movie downloader
+        icon: radarr.png
+        widget:
+            type: radarr
+            url: {{HOMEPAGE_VAR_RADARR_URL}}
+            key: {{HOMEPAGE_VAR_RADARR_API}}
+    - Lidarr:
+        href: {{HOMEPAGE_VAR_LIDARR_URL}}
+        description: Music downloader
+        icon: lidarr.png
+        widget:
+            type: lidarr
+            url: {{HOMEPAGE_VAR_LIDARR_URL}}
+            key: {{HOMEPAGE_VAR_LIDARR_API}}
+    - Prowlarr:
+        href: {{HOMEPAGE_VAR_PROWLARR_URL}}
+        description: Torrent indexer
+        icon: prowlarr.png
+        widget:
+            type: prowlarr
+            url: {{HOMEPAGE_VAR_PROWLARR_URL}}
+            key: {{HOMEPAGE_VAR_PROWLARR_API}}
+    - Bazarr:
+        href: {{HOMEPAGE_VAR_BAZARR_URL}}
+        description: Subtitles downloader
+        icon: bazarr.png
+        widget:
+            type: bazarr
+            url: {{HOMEPAGE_VAR_BAZARR_URL}}
+            key: {{HOMEPAGE_VAR_BAZARR_API}}
+
+- Media:
+    - Emby:
+        href: {{HOMEPAGE_VAR_EMBY_URL}}
+        description: Media player
+        icon: emby.png
+        widget:
+            type: emby
+            url: {{HOMEPAGE_VAR_EMBY_URL}}
+            key: {{HOMEPAGE_VAR_EMBY_API}}
+            enableBlocks: true # optional, defaults to false
+            enableNowPlaying: true # optional, defaults to true
+            enableUser: true # optional, defaults to false
+
+- Development:
+    - Nginx Proxy Manager:
+        href: {{HOMEPAGE_VAR_NGINX_PROXY_MANAGER_URL}}
+        description: Reverse proxy
+        icon: nginx-proxy-manager.png
+        widget:
+            type: npm
+            url: {{HOMEPAGE_VAR_NGINX_PROXY_MANAGER_URL}}
+            username: {{HOMEPAGE_VAR_NGINX_PROXY_MANAGER_USERNAME}}
+            password: {{HOMEPAGE_VAR_NGINX_PROXY_MANAGER_PASSWORD}}
+
+- Miscellaneous:
+    - AdGuard Home:
+        href: {{HOMEPAGE_VAR_ADGUARDHOME1_URL}}
+        description: Ad Blocker
+        icon: adguard-home.png
+        widget:
+            type: adguard
+            url: {{HOMEPAGE_VAR_ADGUARDHOME1_URL}}
+            username: {{HOMEPAGE_VAR_ADGUARDHOME_USERNAME}}
+            password: {{HOMEPAGE_VAR_ADGUARDHOME_PASSWORD}}
+    - AdGuard Home 2:
+        href: {{HOMEPAGE_VAR_ADGUARDHOME1_URL}}
+        description: Backup Instance
+        icon: adguard-home.png
+        widget:
+            type: adguard
+            url: {{HOMEPAGE_VAR_ADGUARDHOME2_URL}}
+            username: {{HOMEPAGE_VAR_ADGUARDHOME_USERNAME}}
+            password: {{HOMEPAGE_VAR_ADGUARDHOME_PASSWORD}}

@@ -1,0 +1,1 @@
+Please follow this guide [Bazarr Guide by Trash Guides](https://trash-guides.info/Bazarr/)

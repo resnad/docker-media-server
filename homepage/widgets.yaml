@@ -1,0 +1,17 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/latest/configs/service-widgets
+
+- resources:
+    cpu: true
+    memory: true
+    disk:
+        - /
+        - /mnt/media1
+        - /mnt/media2
+    cputemp: true
+    uptime: true
+
+- search:
+    provider: google
+    target: _blank

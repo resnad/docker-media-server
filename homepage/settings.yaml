@@ -1,0 +1,22 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/latest/configs/settings
+
+title: Homepage Hub
+showStats: true
+# background: 
+#   image: https://images.unsplash.com/photo-1502790671504-542ad42d5189?auto=format&fit=crop&w=2560&q=80
+#   opacity: 80 
+layout:
+  Torrent:
+    style: row
+    columns: 4
+  Media:
+    style: column
+    columns: 1
+  Development:
+    style: column
+    columns: 1
+  Miscellaneous:
+    style: column
+    columns: 1
