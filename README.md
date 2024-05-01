@@ -2,7 +2,11 @@
 
 I recently started my Homelab journey and I wanted to share some of the services I run for those interested in doing something similar. This stack is focused on everything you need to run a local media server and even share your library with your friends.
 
-Some of the features:
+### Hardware tested
+- ACEMAGICIAN AM06PRO Mini PC, AMD Ryzen 7 5700U with Ubuntu Server 24.04
+- Raspberry Pi 5 8GB with Raspberry Pi OS Lite (64-bit)
+
+### Some of the features:
 - Separate **Sonarr** instances, one for ```TV shows``` and one for ```Anime```, each with their own Custom Formats and Quality profiles. Why separate instances? It's easier to maintain and keep the relevant custom formats isolated. 1080p quality is usually enough for most anime but that's not the case for TV shows.
 - **Radarr** with Custom Formats and Quality Profiles.
 - Default **Lidarr** because I haven't found an optimal configuration yet.
